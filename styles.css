@@ -1,0 +1,152 @@
+/* 1. CSS Variables for centralized theming */
+:root {
+    --bg-color: #f4f4f9;
+    --calc-bg: #222222;
+    --text-light: #ffffff;
+    --key-bg: #333333;
+    --key-hover: #444444;
+    --accent-color: #ff9500;
+    --accent-hover: #ffaa33;
+    --clear-bg: #a5a5a5;
+    --clear-text: #000000;
+}
+
+/* 2. The Box Model Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 3. Viewport and Body Layout */
+body {
+    background-color: var(--bg-color);
+    font-family: system-ui, -apple-system, sans-serif;
+    
+    /* Center the calculator on the screen */
+    display: grid;
+    place-items: center;
+    
+    /* Prevent scrolling and handle mobile browser UI */
+    min-height: 100dvh;
+    overflow: hidden;
+    
+    /* UX: Prevent accidental text highlighting anywhere */
+    user-select: none;
+    -webkit-user-select: none;
+    
+    /* UX: Remove Android's native blue tap highlight */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 4. The Calculator Container */
+.calculator {
+    background-color: var(--calc-bg);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    
+    /* Fluid Boundaries */
+    width: 100%;
+    max-width: 400px;
+    
+    /* Push up to avoid the iOS home gesture bar */
+    margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* 5. The Display */
+.calculator-display {
+    color: var(--text-light);
+    text-align: right;
+    padding: 20px 10px;
+    margin-bottom: 10px;
+    
+    /* Flexbox keeps the text anchored to the bottom right */
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 80px;
+    overflow: hidden;
+    
+    /* Bulletproof scaling */
+    font-size: clamp(2.5rem, 10vw, 4rem);
+}
+
+/* 6. The Keypad */
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* 7. Button Fundamentals */
+.key {
+    background-color: var(--key-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    
+    /* Use min-height so they can shrink if forced, but default to 60px */
+    min-height: 60px;
+    
+    /* UX: Disable double-tap-to-zoom on buttons */
+    touch-action: manipulation;
+    
+    /* UX: Make the transition fast for a tactile feel */
+    transition: background-color 0.05s ease, transform 0.05s ease;
+}
+
+/* The Hover State (for mice) */
+.key:hover {
+    background-color: var(--key-hover);
+}
+
+/* NEW: The Active State (when the finger is physically touching the screen) */
+.key:active {
+    transform: scale(0.95);
+    filter: brightness(1.2);
+}
+
+/* 8. Specific Button Overrides */
+.operator, .equals {
+    background-color: var(--accent-color);
+}
+
+.operator:hover, .equals:hover {
+    background-color: var(--accent-hover);
+}
+
+.clear {
+    background-color: var(--clear-bg);
+    color: var(--clear-text);
+    grid-column: span 3;
+}
+
+.zero {
+    grid-column: span 2;
+    border-radius: 30px;
+}
+
+/* 9. The Landscape Survival Rule */
+@media (max-height: 600px) and (orientation: landscape) {
+    .calculator {
+        padding: 10px;
+        max-width: 500px; 
+    }
+    
+    .calculator-keys {
+        gap: 8px;
+    }
+    
+    .key {
+        min-height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .calculator-display {
+        height: 50px;
+        margin-bottom: 5px;
+    }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff9500">
+</head>
+<body>
+    
+    <main class="calculator">
+        
+        <!-- The Display -->
+        <div class="calculator-display" id="display">0</div>
+        
+        <!-- The Keypad -->
+        <div class="calculator-keys">
+            <!-- Row 1 -->
+            <button type="button" class="key clear" data-action="clear">AC</button>
+            <button type="button" class="key operator" data-action="divide">&divide;</button>
+            
+            <!-- Row 2 -->
+            <button type="button" class="key">7</button>
+            <button type="button" class="key">8</button>
+            <button type="button" class="key">9</button>
+            <button type="button" class="key operator" data-action="multiply">&times;</button>
+            
+            <!-- Row 3 -->
+            <button type="button" class="key">4</button>
+            <button type="button" class="key">5</button>
+            <button type="button" class="key">6</button>
+            <button type="button" class="key operator" data-action="subtract">-</button>
+            
+            <!-- Row 4 -->
+            <button type="button" class="key">1</button>
+            <button type="button" class="key">2</button>
+            <button type="button" class="key">3</button>
+            <button type="button" class="key operator" data-action="add">+</button>
+            
+            <!-- Row 5 -->
+            <button type="button" class="key zero">0</button>
+            <button type="button" class="key" data-action="decimal">.</button>
+            <button type="button" class="key equals" data-action="calculate">=</button>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
