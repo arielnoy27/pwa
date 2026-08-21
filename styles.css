@@ -1,7 +1,7 @@
 /* 1. CSS Variables for centralized theming */
 :root {
-    --bg-color: #f4f4f9;
-    --calc-bg: #222222;
+    --bg-color: #f4f4f9; /* Desktop background */
+    --calc-bg: #222222;  /* App background */
     --text-light: #ffffff;
     --key-bg: #333333;
     --key-hover: #444444;
@@ -18,16 +18,12 @@
     padding: 0;
 }
 
-/* 3. Viewport and Body Layout */
+/* 3. Viewport and Body Layout (Mobile First: Full Bleed) */
 body {
-    background-color: var(--bg-color);
+    /* Match the body background to the app so no white borders exist on mobile */
+    background-color: var(--calc-bg); 
     font-family: system-ui, -apple-system, sans-serif;
     
-    /* Center the calculator on the screen */
-    display: grid;
-    place-items: center;
-    
-    /* Prevent scrolling and handle mobile browser UI */
     min-height: 100dvh;
     overflow: hidden;
     
@@ -42,16 +38,17 @@ body {
 /* 4. The Calculator Container */
 .calculator {
     background-color: var(--calc-bg);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
     
-    /* Fluid Boundaries */
+    /* Force the container to stretch to the exact dimensions of the screen */
     width: 100%;
-    max-width: 400px;
+    height: 100dvh; 
     
-    /* Push up to avoid the iOS home gesture bar */
-    margin-bottom: env(safe-area-inset-bottom);
+    /* Turn the app into a vertical flexbox */
+    display: flex;
+    flex-direction: column;
+    
+    padding: 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
 /* 5. The Display */
@@ -59,13 +56,13 @@ body {
     color: var(--text-light);
     text-align: right;
     padding: 20px 10px;
-    margin-bottom: 10px;
     
-    /* Flexbox keeps the text anchored to the bottom right */
+    /* Absorb 1 part of the available vertical space */
+    flex: 1; 
+    
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    height: 80px;
     overflow: hidden;
     
     /* Bulletproof scaling */
@@ -74,8 +71,12 @@ body {
 
 /* 6. The Keypad */
 .calculator-keys {
+    /* Absorb 2 parts of the available vertical space */
+    flex: 2; 
+    
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr); /* Force exactly 5 equal rows */
     gap: 12px;
 }
 
@@ -88,22 +89,22 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     
-    /* Use min-height so they can shrink if forced, but default to 60px */
-    min-height: 60px;
+    /* Tell every button to stretch and fill its entire grid cell */
+    height: 100%;
+    width: 100%;
     
     /* UX: Disable double-tap-to-zoom on buttons */
     touch-action: manipulation;
     
-    /* UX: Make the transition fast for a tactile feel */
+    /* UX: Fast transition for tactile feel */
     transition: background-color 0.05s ease, transform 0.05s ease;
 }
 
-/* The Hover State (for mice) */
 .key:hover {
     background-color: var(--key-hover);
 }
 
-/* NEW: The Active State (when the finger is physically touching the screen) */
+/* The Active State (when the finger is physically touching the screen) */
 .key:active {
     transform: scale(0.95);
     filter: brightness(1.2);
@@ -126,14 +127,21 @@ body {
 
 .zero {
     grid-column: span 2;
-    border-radius: 30px;
+    border-radius: 50px; /* Keep the pill shape dynamically rounded */
 }
 
-/* 9. The Landscape Survival Rule */
+
+/* =========================================
+   9. DEVICE BREAKPOINTS & SURVIVAL RULES
+========================================= */
+
+/* Landscape Survival (Short screens) */
 @media (max-height: 600px) and (orientation: landscape) {
     .calculator {
         padding: 10px;
-        max-width: 500px; 
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
     }
     
     .calculator-keys {
@@ -141,12 +149,28 @@ body {
     }
     
     .key {
-        min-height: 40px;
         font-size: 1.2rem;
     }
     
     .calculator-display {
-        height: 50px;
-        margin-bottom: 5px;
+        font-size: clamp(2rem, 5vh, 3rem);
+    }
+}
+
+/* Desktop Widget Rule (Large screens) */
+@media (min-width: 768px) {
+    body {
+        /* Bring back the contrasting desktop background */
+        background-color: var(--bg-color); 
+        display: grid;
+        place-items: center; /* Center the widget */
+    }
+    
+    .calculator {
+        /* Restrict the dimensions to create a floating widget */
+        height: 700px;
+        max-width: 400px;
+        border-radius: 24px;
+        box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.4);
     }
 }
